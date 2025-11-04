@@ -1,4 +1,6 @@
+import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from strawberry.fastapi import GraphQLRouter
 from contextlib import asynccontextmanager
 from schema import schema
@@ -20,6 +22,16 @@ app = FastAPI(
     description="API de Business Intelligence para sistema de gestión hotelera",
     version="1.0.0",
     lifespan=lifespan
+)
+
+allowed_origins = [o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",") if o.strip()]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
 )
 
 graphql_app = GraphQLRouter(schema)
