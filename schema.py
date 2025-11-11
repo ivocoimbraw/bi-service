@@ -217,4 +217,5 @@ class Query:
         return await calcular_kpis(fecha_inicio, fecha_fin, hotel_id_erp)
 
 
-schema = strawberry.Schema(query=Query)
+# Usar schema con soporte de Apollo Federation
+schema = strawberry.federation.Schema(query=Query, enable_federation_2=True)
